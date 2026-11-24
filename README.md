@@ -22,8 +22,8 @@ npm run dev
 Birlamchi administrator login va paroli quyidagi muhit o‘zgaruvchilari bilan yaratiladi:
 
 ```bash
-ADMIN_EMAIL=admin@median.uz
-ADMIN_PASSWORD=kuhli-parolingiz
+ADMIN_EMAIL=admin@your-domain.example
+ADMIN_PASSWORD=replace-with-a-long-random-password
 ```
 
 Ma’lumotlarni bazaga joylashdan keyin administratorni yarating:
