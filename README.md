@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MEDIAN — tibbiy axborot portali
 
-## Getting Started
+Next.js 16, TypeScript, Tailwind CSS, Prisma va PostgreSQL asosidagi professional tibbiy media portali.
 
-First, run the development server:
+## Namuna ma’lumotlari
+
+Shifokor, maqola, yangilik va ensiklopediya ma’lumotlari **demo** hisoblanadi. Ular real shifokor tasdig‘ini bildirmaydi.
+
+## Ishga tushirish
 
 ```bash
+npm install
+cp .env.example .env
+npm run db:generate
+npm run db:migrate
+npm run db:seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Admin panel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Birlamchi administrator login va paroli quyidagi muhit o‘zgaruvchilari bilan yaratiladi:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+ADMIN_EMAIL=admin@median.uz
+ADMIN_PASSWORD=kuhli-parolingiz
+```
 
-## Learn More
+Ma’lumotlarni bazaga joylashdan keyin administratorni yarating:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run db:seed
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Kirish manzili: `/admin/login`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`/admin` sahifasi sessiyasiz ochilmaydi. Productionda `NEXTAUTH_SECRET` uchun uzun tasodifiy qiymat, PostgreSQL paroli, HTTPS domeni va kuchli admin parolini ishlating.
 
-## Deploy on Vercel
+Sayt: `http://localhost:3000`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Admin: `http://localhost:3000/admin`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Docker
+
+```bash
+docker compose up --build
+```
+
+## Production
+
+```bash
+npm run db:deploy
+npm run build
+npm start
+```
+
+## Zaxira va tiklash
+
+Zaxira:
+
+```bash
+docker compose exec db pg_dump -U median -d median -Fc > median.dump
+```
+
+Tiklash:
+
+```bash
+docker compose exec -T db pg_restore -U median -d median --clean --if-exists < median.dump
+```
+
+Production hostda `.env` ichida kuchli `NEXTAUTH_SECRET`, PostgreSQL paroli va HTTPS domeni o‘rnating. Reverse proxy orqali 3000-portni Caddy/Nginx bilan ulash tavsiya etiladi.
